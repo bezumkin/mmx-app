@@ -162,13 +162,6 @@ class App
                 foreach ($file['css'] as $css) {
                     $assets[] = $baseUrl . $css;
                 }
-                foreach ($files as $key => $value) {
-                    if (!empty($value['css']) && str_contains($key, 'vueform')) {
-                        foreach ($value['css'] as $css) {
-                            $assets[] = $baseUrl . $css;
-                        }
-                    }
-                }
 
                 return $assets;
             }
