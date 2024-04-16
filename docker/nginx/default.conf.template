@@ -1,0 +1,41 @@
+gzip on;
+gzip_vary on;
+gzip_proxied any;
+gzip_comp_level 6;
+gzip_buffers 16 8k;
+gzip_http_version 1.1;
+gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+
+charset utf-8;
+root /modx/;
+client_max_body_size 0;
+fastcgi_buffering off;
+fastcgi_request_buffering off;
+
+server {
+    listen 80 default;
+    listen ${NGINX_PORT};
+    index index.php;
+
+    location @rewrite {
+        rewrite ^/(.*)$ /index.php?q=$1;
+    }
+
+    location ~ \.php$ {
+        try_files $uri $uri/ @rewrite;
+
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_pass php-fpm:9000;
+    }
+
+    location / {
+        try_files $uri $uri/ @rewrite;
+    }
+
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|bmp|ttf|woff|woff2|svg)$ {
+        access_log off;
+        expires 10d;
+        break;
+    }
+}

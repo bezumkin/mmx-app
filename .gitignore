@@ -1,0 +1,4 @@
+/.idea
+/docker/mariadb
+/modx
+/.env

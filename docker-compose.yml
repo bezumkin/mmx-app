@@ -1,0 +1,65 @@
+version: '3.9'
+services:
+
+  mariadb:
+    image: mariadb:${MARIADB_VERSION}
+    environment:
+      - TZ=${TZ}
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
+      - MARIADB_DATABASE=${MARIADB_DATABASE:-modx}
+      - MARIADB_USER=${MARIADB_USERNAME:-modx}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD:-modx}
+    volumes:
+      - ./docker/mariadb:/var/lib/mysql
+    ports:
+      - ${MARIADB_PORT}:3306
+
+  nginx:
+    image: nginx:${NGINX_VERSION:-1.25}
+    environment:
+      - TZ=${TZ}
+      - NGINX_PORT=${NGINX_PORT:-8080}
+    volumes:
+      - ./docker/nginx:/etc/nginx/templates
+      - ./mmx-app/assets:/mmx-app/assets
+      - ./modx:/modx
+    ports:
+      - ${NGINX_PORT}:80
+    depends_on:
+      - php-fpm
+      - mariadb
+    working_dir: /modx
+
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+      args:
+        - TZ=${TZ}
+        - PHP_VERSION=${PHP_VERSION:-8.1}
+        - PHP_XDEBUG=${PHP_XDEBUG:-1}
+    volumes:
+      # - ~/.ssh:/root/.ssh:ro
+      - ./modx:/modx
+      - ./mmx-app:/mmx-app
+    cap_add:
+      - SYS_PTRACE
+    depends_on:
+      - mariadb
+    environment:
+      - PHP_IDE_CONFIG=serverName=ModxDocker
+      - COMPOSER_ALLOW_SUPERUSER=1
+    working_dir: /modx
+
+  node:
+    image: node:${NODE_VERSION:-21}
+    environment:
+      - TZ=${TZ}
+    ports:
+      - ${NODE_DEV_PORT}:${NODE_DEV_PORT}
+    volumes:
+      - ./modx:/modx
+      - ./mmx-app:/mmx-app
+    depends_on:
+      - nginx
+    working_dir: /mmx-app/assets
+    command: sh -c "npm i && npm run dev"
