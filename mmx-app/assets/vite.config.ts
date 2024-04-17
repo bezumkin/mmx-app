@@ -1,10 +1,11 @@
 // @ts-ignore
-import withMmx from '@vesp/mmx-frontend/config'
+import withMmx, {aiConfig} from '@vesp/mmx-frontend/config'
 import ai from 'unplugin-auto-import/vite'
 
 export default withMmx('mmx-app', {
   plugins: [
     ai({
+      ...aiConfig,
       dirs: ['src/mgr/utils'],
     }),
   ],
