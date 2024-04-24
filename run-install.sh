@@ -17,3 +17,4 @@ docker exec -ti $CONTAINER bash -c "php setup/cli-install.php --database_server=
 docker exec -ti $CONTAINER bash -c "composer config repositories.mmx-app path /mmx-app"
 docker exec -ti $CONTAINER bash -c "composer require mmx/app"
 docker exec -ti $CONTAINER bash -c "composer exec mmx-app install"
+docker exec -ti $CONTAINER bash -c "rm -rf core/cache"
