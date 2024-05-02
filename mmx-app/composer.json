@@ -20,6 +20,6 @@
   "require": {
     "php": ">=8.1",
     "vesp/core": "^4.0",
-    "mmx/database": "^1.0.2"
+    "mmx/database": "^1.1"
   }
 }
