@@ -82,7 +82,7 @@ class Remove extends Command
         $this->modx->getCacheManager()->refresh();
         $output->writeln('<info>Cleared MODX cache</info>');
 
-        try {
+        /*try {
             $base = MODX_BASE_PATH . 'composer.json';
             $core = MODX_CORE_PATH . 'composer.json';
             if (file_exists($base) || file_exists($core)) {
@@ -94,6 +94,6 @@ class Remove extends Command
                 }
             }
         } catch (\Throwable $e) {
-        }
+        }*/
     }
 }
