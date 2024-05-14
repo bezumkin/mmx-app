@@ -3,6 +3,7 @@
 import sys
 import os
 import re
+import shutil
 
 if len(sys.argv) < 2:
     newName = input('Please enter new extra namespace, like "super-extra": ')
@@ -74,6 +75,9 @@ files = [
     'run-install.sh',
 ]
 
+if not os.path.isfile('.env'):
+    os.rename('.env.dist', '.env')
+
 if os.path.isdir('mmx-app'):
     os.rename('mmx-app', replacement['mmx-app'])
     for directory in directories:
@@ -82,3 +86,15 @@ if os.path.isdir('mmx-app'):
 for file in files:
     if os.path.isfile(file):
         process_file(file)
+
+print('Deleting unnecessary files...')
+
+if os.path.isdir('.git'):
+    try:
+        shutil.rmtree('.git')
+    except OSError as e:
+        pass
+
+os.remove(__file__)
+
+print('Success!')
