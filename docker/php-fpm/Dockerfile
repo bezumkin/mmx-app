@@ -24,12 +24,17 @@ RUN echo "max_file_uploads=256M" > /usr/local/etc/php/conf.d/docker-php-ext-uplo
   && echo "upload_max_filesize=256M" >> /usr/local/etc/php/conf.d/docker-php-ext-upload.ini
 
 ARG PHP_XDEBUG
+ARG PHP_VERSION
 RUN if [ "$PHP_XDEBUG" = "1" ]; then \
-      yes | pecl install xdebug \
-          && echo "zend_extension=xdebug" > /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
-          && echo "xdebug.log_level=0" >> /usr/local/etc/php/conf.d/xdebug.ini; \
+      if [ "$PHP_VERSION" = "7.4" ]; then \
+        yes | pecl install xdebug-3.1.6; \
+      else \
+        yes | pecl install xdebug; \
+      fi \
+      && echo "zend_extension=xdebug" > /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.mode=develop,debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.log_level=0" >> /usr/local/etc/php/conf.d/xdebug.ini; \
     fi
 
