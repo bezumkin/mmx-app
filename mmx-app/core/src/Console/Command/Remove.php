@@ -2,12 +2,14 @@
 
 namespace MMX\App\Console\Command;
 
+use MMX\App\App;
+use MMX\Database\Models\Category;
 use MMX\Database\Models\Menu;
 use MMX\Database\Models\Namespaces;
 use MMX\Database\Models\Plugin;
 use MMX\Database\Models\PluginEvent;
+use MMX\Database\Models\Snippet;
 use MMX\Database\Models\SystemSetting;
-use MMX\App\App;
 use MODX\Revolution\modX;
 use Phinx\Console\PhinxApplication;
 use Phinx\Wrapper\TextWrapper;
@@ -45,6 +47,12 @@ class Remove extends Command
             $output->writeln('<info>Removed menu "' . $menu->text . '"</info>');
         }
 
+        if ($category = Category::query()->where('category', App::NAME)->first()) {
+            /** @var Category $category */
+            $category->delete();
+            $output->writeln('<info>Removed category "' . $category->category . '"</info>');
+        }
+
         foreach (SystemSetting::query()->where('namespace', App::NAMESPACE)->cursor() as $setting) {
             /** @var SystemSetting $setting */
             $setting->delete();
@@ -64,6 +72,12 @@ class Remove extends Command
             $output->writeln('<info>Removed plugin "' . $plugin->name . '"</info>');
         }
 
+        if ($snippet = Snippet::query()->where('name', App::NAME)->first()) {
+            /** @var Snippet $snippet */
+            $snippet->delete();
+            $output->writeln('<info>Removed snippet "' . $snippet->name . '"</info>');
+        }
+
         $output->writeln('<info>Rollback Phinx migrations</info>');
         $phinx = new TextWrapper(new PhinxApplication(), ['configuration' => $srcPath . '/core/phinx.php']);
         if ($res = $phinx->getRollback('local', 0)) {
@@ -81,19 +95,5 @@ class Remove extends Command
 
         $this->modx->getCacheManager()->refresh();
         $output->writeln('<info>Cleared MODX cache</info>');
-
-        /*try {
-            $base = MODX_BASE_PATH . 'composer.json';
-            $core = MODX_CORE_PATH . 'composer.json';
-            if (file_exists($base) || file_exists($core)) {
-                $composer = json_decode(file_get_contents($base) ?: file_get_contents($core), true);
-                if (!isset($composer['require']['mmx/database'])) {
-                    $output->writeln('<info>Removing mmx/database as it is not required in composer.json</info>');
-                    $remove = new \MMX\Database\Console\Command\Remove($this->modx);
-                    $remove->run($input, $output);
-                }
-            }
-        } catch (\Throwable $e) {
-        }*/
     }
 }

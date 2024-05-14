@@ -108,12 +108,12 @@ class Install extends Command
         }
 
         $snippets = [
-            'mmxApp' => [
+            App::NAME => [
                 'file' => 'snippet.php',
                 'properties' => [
                     'noCSS' => [
                         'name' => 'noCSS',
-                        'desc' => 'mmx-app.snippets.nocss',
+                        'desc' => App::NAMESPACE . '.snippets.nocss',
                         'type' => 'combo-boolean',
                         'value' => false,
                         'lexicon' => App::NAMESPACE . ':default',
