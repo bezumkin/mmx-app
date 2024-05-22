@@ -4,7 +4,7 @@
     <div class="small text-secondary">{{ $t('menu_desc') }}</div>
 
     <BNav tabs class="mt-3">
-      <BNavItem v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}" active-class="active">
+      <BNavItem v-for="(section, idx) in sections" :key="idx" :to="{name: section.route}">
         {{ $t(section.title) }}
       </BNavItem>
     </BNav>
