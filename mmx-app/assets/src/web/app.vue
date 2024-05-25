@@ -8,11 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import {Ref} from 'vue'
-
 const url = 'web/items'
 const total = ref(0)
-const items: Ref<Record<string, any>[]> = ref([])
+const items = ref<Record<string, any>[]>([])
 
 onMounted(async () => {
   try {
