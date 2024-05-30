@@ -20,6 +20,12 @@
   @import "bootstrap-scss/helpers";
   @import "bootstrap-scss/utilities/api";
   @import "@vesp/mmx-frontend/assets/components";
+
+  form {
+    fieldset:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  }
 }
 
 @import "bootstrap-scss/modal";
