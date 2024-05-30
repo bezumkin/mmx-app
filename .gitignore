@@ -1,6 +1,7 @@
 /.idea
 /docker/mariadb
-/mmx-app/assets/dist
+/mmx-app/assets/dist/
+!/mmx-app/assets/dist/.ignore
 /mmx-app/assets/package-lock.json
 /modx
 /.env
