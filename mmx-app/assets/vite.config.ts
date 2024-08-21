@@ -26,4 +26,11 @@ export default withMmx('mmx-app', {
       },
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        quietDeps: true,
+      },
+    },
+  },
 })
